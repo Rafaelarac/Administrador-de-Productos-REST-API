@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist", //Se guarda cuando compilamos
+        "rootDir": "./src", //Este es el directorio raiz
+        "lib": ["ESNext"], //El tipo de compilado
+        "strict": false, //Nos permite no ser tan estrict con los any o tipado
+        "sourceMap": true, //Nos genera los mapas
+        "esModuleInterop": true, //Nos permite importar librerias en commonjs
+        "declaration": true, //Nos genera los archivos de definicion
+    },
+    "include": ["src/**/*.ts"]
+}
