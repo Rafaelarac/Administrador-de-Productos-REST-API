@@ -1,4 +1,5 @@
-import {Router} from "express"; 
+import {Router} from "express";
+import { createProduct } from "./handlers/product";
 
 const router = Router()
 
@@ -9,12 +10,10 @@ router.get('/', (req, res) => {
     res.json('Desde GET')
 }) 
 
-//Metodo POST agrega nuevos datos
-router.post('/', (req, res) => {
+//Metodo POST agrega nuevos datos, de la funcion product.ts
+router.post('/', createProduct) 
 
-    //Aqui va el codigo
-    res.json('Desde POST')
-}) 
+
 //Metodo PUT reemplaza datos por otros
 router.put('/', (req, res) => {
 
