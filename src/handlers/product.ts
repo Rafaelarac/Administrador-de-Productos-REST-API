@@ -1,34 +1,58 @@
-import {Request, Response} from 'express'
-import {check, validationResult} from 'express-validator'
+import { Request, Response } from 'express'
 import Product from '../models/Product.model';
 
-//Funcion post que se envia al router
-export const createProduct = async (req : Request, res : Response) => {
 
-    //Validacion
-    //notEmpty valida que no este vacio, withMessage envie un msj, run toma el req
-    await check('name')
-        .notEmpty().withMessage('El nombre del producto no puede ir vacio')
-        .run(req)
-    //Valida el precio, isNumeric, valida que sea numero, seguido del mensaje, luego validamos que no este vacio, seguido del mensaje
-    await check('price')
-        .isNumeric().withMessage('Valor no valido')
-        .notEmpty().withMessage('El precio del producto no puede ir vacio')
-        .custom((value) => value > 0).withMessage('El precio del producto no puede ir vacio')
-        .run(req)
 
-    //Recuperar mensajes de error y ver la validacion con validationResult nos da un true
-    let errors = validationResult(req)
-    //Si hay errores.. o esta vacio entra como true, al estar negado en false, entra en true
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()})
+export const getProduct = async (req: Request, res: Response) => {
+
+    try {
+        const products = await Product.findAll({
+            order: [
+                ['id', 'ASC']
+            ],
+            attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
+        })
+        res.json({ data: products })
+
+    } catch (error) {
+        console.log(error);
     }
+}
 
-    //Recupera el body del json quec creamos
-    const product = new Product(req.body)
+export const getProductById = async (req: Request, res: Response) => {
 
-    const saveProduct = await product.save()
+    try {
+        const { id } = req.params
+        const product = await Product.findByPk(id, {
+            attributes: {exclude: ['createdAt', 'updatedAt', 'availability']}
+        })
+        
+        if (!product) {
+            return res.status(404).json({errors: "Producto no encontrado"})
+        }
+        res.json({data: product})
 
-    res.json({data: saveProduct})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+//Funcion post que se envia al router
+export const createProduct = async (req: Request, res: Response) => {
+    //Recupera el body del json que creamos opcion 1
+    //const product = new Product(req.body)
+    //const saveProduct = await product.save()
+
+    //Lo pasamos por el Try/Catch
+    try {
+        //opcion2
+        const product = await Product.create(req.body)
+        res.json({ data: product })
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
