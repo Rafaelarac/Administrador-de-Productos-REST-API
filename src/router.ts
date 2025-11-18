@@ -1,56 +1,54 @@
-import {Router} from "express";
-import {body, param} from "express-validator"
-import { createProduct, getProduct, getProductById } from "./handlers/product";
+import { Router } from "express";
+import { body, param } from "express-validator"
+import { createProduct, deleteProduct, getProduct, getProductById, updateAvailability, updateProduct } from "./handlers/product";
 import { handleInputErrors } from "./middleware";
 
 const router = Router()
 
-//Metodo get para recuperar todos los datos
 router.get('/', getProduct)
 
-//Metodo get para Recupera un dato
 router.get('/:id',
     param('id').isInt().withMessage('ID No Valido'),
     handleInputErrors,
     getProductById
-)  
+)
 
-//Metodo POST agrega nuevos datos, de la funcion product.ts
-router.post('/', 
-    
-    //Reglas de valigacion
-    //notEmpty valida que no este vacio, withMessage envie un msj, run toma el req
+router.post('/',
     body('name')
         .notEmpty().withMessage('El nombre del producto no puede ir vacio'),
-
-    //Valida el precio, isNumeric, valida que sea numero, seguido del mensaje, luego validamos que no este vacio, seguido del mensaje
     body('price')
         .isNumeric().withMessage('Valor no valido')
         .notEmpty().withMessage('El precio del producto no puede ir vacio')
         .custom((value) => value > 0).withMessage('El precio del producto no puede ir vacio'),
-        handleInputErrors, //Funcion intermedia que verifica si todo esta bien
-    createProduct) 
+    handleInputErrors,
+    createProduct)
 
 
-//Metodo PUT reemplaza datos por otros
-router.put('/', (req, res) => {
 
-    //Aqui va el codigo
-    res.json('Desde PUT')
-}) 
+router.put('/:id',
+    body('name')
+        .notEmpty().withMessage('El nombre del producto no puede ir vacio'),
+    body('price')
+        .isNumeric().withMessage('Valor no valido')
+        .notEmpty().withMessage('El precio del producto no puede ir vacio')
+        .custom((value) => value > 0).withMessage('El precio del producto no puede ir vacio'),
+    body('availability').isBoolean().withMessage('Valor para disponibilidad no valido'),
+    handleInputErrors,
+    updateProduct
+)
 
-//Metodo PATCH actualiza
-router.patch('/', (req, res) => {
 
-    //Aqui va el codigo
-    res.json('Desde PATCH')
-})
+router.patch('/:id',
+    param('id').isInt().withMessage('ID No Valido'),
+    handleInputErrors,
+    updateAvailability)
 
-//Metodo delete Elimina datos
-router.delete('/', (req, res) => {
 
-    //Aqui va el codigo
-    res.json('Desde DELETE')
-}) 
+router.delete('/:id',
+    param('id').isInt().withMessage('ID No Valido'),
+    handleInputErrors,
+    deleteProduct)
 
 export default router
+
+

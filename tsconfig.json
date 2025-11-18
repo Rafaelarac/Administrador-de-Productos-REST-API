@@ -11,7 +11,8 @@
         "esModuleInterop": true, //Nos permite importar librerias en commonjs
         "declaration": true, //Nos genera los archivos de definicion
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "isolatedModules": true
     },
     "include": ["src/**/*.ts"]
 }
