@@ -63,7 +63,9 @@ export const updateProduct = async (req: Request, res: Response) => {
     })
 
     if (!product) {
-        return res.status(404).json({ errors: "Producto no encontrado" })
+        return res.status(404).json({ 
+            errors: "Producto no encontrado"
+        })
     }
 
     //Actualizar
