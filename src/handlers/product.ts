@@ -5,36 +5,25 @@ import Product from '../models/Product.model';
 
 export const getProduct = async (req: Request, res: Response) => {
 
-    try {
-        const products = await Product.findAll({
-            order: [
-                ['id', 'ASC']
-            ],
-            attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
-        })
-        res.json({ data: products })
-
-    } catch (error) {
-        console.log(error);
-    }
+    const products = await Product.findAll({
+        order: [
+            ['id', 'ASC']
+        ],
+        attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
+    })
+    res.json({ data: products })
 }
 
 export const getProductById = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const product = await Product.findByPk(id, {
+        attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
+    })
 
-    try {
-        const { id } = req.params
-        const product = await Product.findByPk(id, {
-            attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
-        })
-
-        if (!product) {
-            return res.status(404).json({ errors: "Producto no encontrado" })
-        }
-        res.json({ data: product })
-
-    } catch (error) {
-        console.log(error);
+    if (!product) {
+        return res.status(404).json({ errors: "Producto no encontrado" })
     }
+    res.json({ data: product })
 }
 
 
@@ -46,14 +35,9 @@ export const createProduct = async (req: Request, res: Response) => {
     //const saveProduct = await product.save()
 
     //Lo pasamos por el Try/Catch
-    try {
-        //opcion2
-        const product = await Product.create(req.body)
-        res.status(201).json({ data: product })
-
-    } catch (error) {
-        console.log(error);
-    }
+    //opcion2
+    const product = await Product.create(req.body)
+    res.status(201).json({ data: product })
 }
 
 export const updateProduct = async (req: Request, res: Response) => {
@@ -63,7 +47,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     })
 
     if (!product) {
-        return res.status(404).json({ 
+        return res.status(404).json({
             errors: "Producto no encontrado"
         })
     }
@@ -102,6 +86,6 @@ export const deleteProduct = async (req, res) => {
     }
 
     await product.destroy()
-    res.json({data: 'Producto Eliminado'})
+    res.json({ data: 'Producto Eliminado' })
 
 }
