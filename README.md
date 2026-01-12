@@ -73,4 +73,4 @@ npm install
 ---
 
 
-![Swagger Documentacion de Endpoints](src/img/image.png)
+[![Swagger Documentacion de Endpoints](src/img/image.png)]
