@@ -69,8 +69,9 @@ cd product-api
 
 # Instalar dependencias
 npm install
+```
 
----
+### 📸 Imagen del Proyecto
 
+<img src="/src/img/image.png" width="700">
 
-[![Swagger Documentacion de Endpoints](src/img/image.png)]
